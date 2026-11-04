@@ -1,0 +1,323 @@
+@import 'tailwindcss';
+
+@source '../js/**/*.vue';
+@source '../views/**/*.blade.php';
+
+/* ------------------------------------------------------------------
+ * Perla Garden — "Akdeniz incisi" tasarım dili
+ * Display: Cormorant Garamond (italik altın vurgular) · Gövde: Outfit
+ * ------------------------------------------------------------------ */
+@theme {
+    /* Forum: logodaki klasik Roma harflerine yakın başlık fontu (Latin + Kiril)
+     * Cormorant Garamond Italic: altın vurgular · Jost: zarif geometrik gövde */
+    --font-sans: 'Jost', ui-sans-serif, system-ui, sans-serif;
+    --font-serif: 'Forum', 'Cormorant Garamond', Georgia, serif;
+    --font-italic: 'Cormorant Garamond', Georgia, serif;
+
+    --color-gold: #c99555;
+    --color-gold-light: #e8c896;
+    --color-gold-dark: #b07c3f;
+    --color-gold-deep: #8e6230;
+    --color-pearl: #f4efe6;
+    --color-ink: #1a1d1b;
+    --color-muted: #6b6e6a;
+    --color-cream: #f6f1e8;
+    --color-sand: #ece3d3;
+    --color-line: #e4dccd;
+    --color-night: #121816;
+    --color-night-700: #1b2321;
+    --color-deep-sea: #0f2226;
+
+    --radius-sm: 14px;
+    --radius-md: 20px;
+    --radius-lg: 28px;
+
+    --ease-out-soft: cubic-bezier(0.2, 0.7, 0.2, 1);
+    --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@layer base {
+    html {
+        scroll-padding-top: 80px;
+        -webkit-text-size-adjust: 100%;
+    }
+    html.lenis, html.lenis body {
+        height: auto;
+    }
+    .lenis.lenis-smooth {
+        scroll-behavior: auto !important;
+    }
+    .lenis.lenis-stopped {
+        overflow: clip;
+    }
+    body {
+        @apply overflow-x-clip bg-pearl font-sans font-light text-ink antialiased;
+    }
+    h1, h2, h3 {
+        text-wrap: balance;
+    }
+    ::selection {
+        background: var(--color-gold);
+        color: #fff;
+    }
+    :focus-visible {
+        outline: 2px solid var(--color-gold);
+        outline-offset: 3px;
+    }
+    @media (pointer: fine) {
+        html.has-cursor, html.has-cursor a, html.has-cursor button {
+            cursor: none;
+        }
+    }
+}
+
+@layer components {
+    .container-site {
+        @apply mx-auto w-[min(1240px,92%)];
+    }
+
+    /* Üst etiket: ince altın çizgi + aralıklı büyük harf */
+    .kicker {
+        @apply inline-flex items-center gap-3 text-[11px] font-medium tracking-[0.32em] text-gold-dark uppercase;
+    }
+    .kicker::before {
+        content: '';
+        @apply h-px w-9 bg-current;
+    }
+    .kicker-light {
+        @apply text-gold-light;
+    }
+
+    .t-hero {
+        @apply font-serif font-normal;
+        font-size: clamp(2.9rem, 7vw, 6.6rem);
+        line-height: 1;
+        letter-spacing: -0.01em;
+    }
+    .t-h2 {
+        @apply font-serif font-normal;
+        font-size: clamp(2.3rem, 4.6vw, 4rem);
+        line-height: 1.06;
+        letter-spacing: -0.005em;
+    }
+    .t-h3 {
+        @apply font-serif text-2xl font-normal sm:text-[28px];
+        line-height: 1.15;
+    }
+    /* Altın italik vurgu — Forum'un yanında biraz büyük durur */
+    .accent {
+        @apply font-italic font-medium text-gold italic;
+        font-size: 1.1em;
+        line-height: 0.9;
+    }
+    .num-italic {
+        @apply font-italic italic;
+    }
+    .lead {
+        @apply text-[17px] leading-[1.8] font-light text-muted sm:text-lg;
+    }
+
+    /* Butonlar: hap form + kayan dolgu efekti */
+    .btn {
+        @apply relative isolate inline-flex items-center justify-center gap-2.5 overflow-hidden rounded-full bg-gold px-7 py-4 text-[13px] font-medium tracking-[0.14em] text-white uppercase transition-colors duration-500;
+    }
+    .btn::before {
+        content: '';
+        @apply absolute inset-0 -z-10 origin-bottom scale-y-0 rounded-[inherit] bg-ink transition-transform duration-500 ease-(--ease-expo);
+    }
+    .btn:hover::before {
+        @apply scale-y-100;
+    }
+    .btn-outline-light {
+        @apply border border-white/50 bg-white/5 backdrop-blur-sm;
+    }
+    .btn-outline-light::before {
+        @apply bg-white;
+    }
+    .btn-outline-light:hover {
+        @apply text-ink;
+    }
+    .btn-white {
+        @apply bg-white text-gold-deep;
+    }
+    .btn-white:hover {
+        @apply text-white;
+    }
+    .btn-ghost-dark {
+        @apply border border-ink/20 bg-transparent text-ink;
+    }
+    .btn-ghost-dark:hover {
+        @apply text-white;
+    }
+
+    .card-line {
+        @apply rounded-(--radius-md) border border-line bg-white;
+    }
+
+    /* İmleci takip eden altın parıltı (v-tilt ile) */
+    .glow-card {
+        @apply relative overflow-hidden;
+    }
+    .glow-card::after {
+        content: '';
+        pointer-events: none;
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%), rgb(201 149 85 / 0.16), transparent 45%);
+        opacity: 0;
+        transition: opacity 0.4s;
+    }
+    .glow-card:hover::after {
+        opacity: 1;
+    }
+
+    .field {
+        @apply block w-full rounded-none border-0 border-b border-line bg-transparent px-0 py-3 text-[16px] font-normal text-ink transition outline-none placeholder:text-muted/50;
+    }
+    .field:focus {
+        @apply border-gold;
+    }
+}
+
+/* Split satır maskesi */
+.split-line {
+    padding-bottom: 0.06em;
+}
+
+/* Basit fade-up (v-reveal) */
+.reveal {
+    opacity: 0;
+    transform: translate3d(0, 30px, 0);
+    transition:
+        opacity 1s var(--ease-expo),
+        transform 1s var(--ease-expo);
+}
+.reveal.is-visible {
+    opacity: 1;
+    transform: none;
+}
+
+/* Kayan yazı bandı */
+@keyframes marquee {
+    to { transform: translate3d(-50%, 0, 0); }
+}
+.marquee-track {
+    animation: marquee var(--marquee-speed, 40s) linear infinite;
+}
+.marquee-reverse .marquee-track {
+    animation-direction: reverse;
+}
+.marquee:hover .marquee-track {
+    animation-play-state: paused;
+}
+.text-outline {
+    color: transparent;
+    -webkit-text-stroke: 1px var(--color-gold-dark);
+}
+
+/* Dönen dairesel yazı rozeti */
+@keyframes spin-slow {
+    to { transform: rotate(360deg); }
+}
+.animate-spin-slow {
+    animation: spin-slow 22s linear infinite;
+}
+
+/* Scroll göstergesi */
+@keyframes scroll-line {
+    0% { transform: scaleY(0); transform-origin: top; }
+    45% { transform: scaleY(1); transform-origin: top; }
+    55% { transform: scaleY(1); transform-origin: bottom; }
+    100% { transform: scaleY(0); transform-origin: bottom; }
+}
+.animate-scroll-line {
+    animation: scroll-line 2.4s var(--ease-expo) infinite;
+}
+
+/* Altın parıltı süpürmesi */
+@keyframes sheen {
+    0% { transform: translateX(-120%) skewX(-20deg); }
+    60%, 100% { transform: translateX(220%) skewX(-20deg); }
+}
+.sheen {
+    position: relative;
+    overflow: hidden;
+}
+.sheen::before {
+    content: '';
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 40%;
+    background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.28), transparent);
+    animation: sheen 5s ease-in-out infinite;
+    pointer-events: none;
+}
+
+@keyframes wa-pulse {
+    0% { box-shadow: 0 0 0 0 rgb(37 211 102 / 0.45); }
+    70% { box-shadow: 0 0 0 16px rgb(37 211 102 / 0); }
+    100% { box-shadow: 0 0 0 0 rgb(37 211 102 / 0); }
+}
+.animate-wa {
+    animation: wa-pulse 2.4s infinite;
+}
+
+/* İnce film greni */
+.grain::after {
+    content: '';
+    position: fixed;
+    inset: -50%;
+    z-index: 90;
+    pointer-events: none;
+    opacity: 0.05;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+    .reveal { opacity: 1; transform: none; }
+}
+
+/* ------------------------------------------------------------------
+ * Admin paneli
+ * ------------------------------------------------------------------ */
+@layer components {
+    .adm-card {
+        @apply rounded-2xl border border-line bg-white p-6 shadow-[0_1px_2px_rgba(0,0,0,.03)];
+    }
+    .adm-label {
+        @apply mb-1.5 block text-[13px] font-medium text-ink;
+    }
+    .adm-hint {
+        @apply mt-1 block text-[12px] text-muted;
+    }
+    .adm-input {
+        @apply block w-full rounded-lg border border-line bg-white px-3.5 py-2.5 text-[14px] text-ink outline-none transition placeholder:text-muted/50 focus:border-gold focus:ring-3 focus:ring-gold/15;
+    }
+    .adm-error {
+        @apply mt-1 block text-[12px] text-red-600;
+    }
+    .adm-btn {
+        @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-[13px] font-medium transition disabled:cursor-not-allowed disabled:opacity-50;
+    }
+    .adm-btn-primary {
+        @apply bg-ink text-white hover:bg-gold-dark;
+    }
+    .adm-btn-gold {
+        @apply bg-gold text-white hover:bg-gold-dark;
+    }
+    .adm-btn-ghost {
+        @apply border border-line bg-white text-ink hover:border-gold hover:text-gold-dark;
+    }
+    .adm-btn-danger {
+        @apply border border-red-200 bg-white text-red-600 hover:bg-red-50;
+    }
+    .adm-icon-btn {
+        @apply grid size-8 place-items-center rounded-md border border-line bg-white text-muted transition hover:border-gold hover:text-gold-dark disabled:opacity-30;
+    }
+}

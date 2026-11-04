@@ -1,0 +1,145 @@
+{
+  "meta": {
+    "name": "Construction Corporate — Cinematic Engineering",
+    "description": "StormTrap'in koyu kömür zeminli, teknik/geometrik hero dili ile Skanska'nın lacivert-beyaz, iri display tipografili, büyük yuvarlak köşeli görsel kartlı kurumsal dilinin sentezi.",
+    "source_references": ["https://stormtrap.com/", "https://www.skanska.com/us/en"],
+    "created_at": "2026-11-04"
+  },
+  "design_system": {
+    "color": {
+      "palette_type": "complementary",
+      "primary": { "hex": "#143275", "role": "Başlıklar, navigasyon linkleri, marka rengi (Skanska navy)" },
+      "secondary": { "hex": "#222326", "role": "Koyu hero ve bant bölümleri zemini (StormTrap charcoal)" },
+      "accent": { "hex": "#00AEEF", "role": "CTA butonları, ok-daire ikonları, vurgular (StormTrap cyan)" },
+      "neutral": {
+        "scale": ["#FFFFFF", "#F8F9FA", "#F0F0F0", "#DDDDDD", "#767676", "#5C5D60", "#414142", "#333333", "#222222", "#000000"],
+        "usage": "Açık uçlar yüzeyler; #414142 gövde metni; #222222 koyu zemin; beyaz koyu zemin üzerindeki metin"
+      },
+      "semantic": { "success": "#3ECE7B", "warning": "#F5A623", "error": "#D64545", "info": "#0099DB" },
+      "surface": { "background": "#FFFFFF", "card": "#F8F9FA", "elevated": "#FFFFFF" },
+      "contrast_strategy": "Koyu (charcoal/video) ve açık (beyaz) bölümler arasında sert ritim; koyuda beyaz, açıkta navy metin",
+      "measurement": { "method": "computed-style frequency via DOM (URL-only reference, no image measurement)" }
+    },
+    "typography": {
+      "type_scale": {
+        "display": { "size": "clamp(3rem, 7vw, 5.3rem)", "weight": 800, "line_height": 1.05, "tracking": "-0.02em" },
+        "heading_1": { "size": "clamp(2.5rem, 5vw, 4rem)", "weight": 800, "line_height": 1.07, "tracking": "-0.02em" },
+        "heading_2": { "size": "clamp(2rem, 3.5vw, 2.25rem)", "weight": 700, "line_height": 1.1, "tracking": "-1px" },
+        "heading_3": { "size": "1.5rem", "weight": 700, "line_height": 1.33, "tracking": "normal" },
+        "body": { "size": "1rem", "weight": 400, "line_height": 1.75, "tracking": "normal" },
+        "body_small": { "size": "0.875rem", "weight": 400, "line_height": 1.6, "tracking": "normal" },
+        "caption": { "size": "0.8125rem", "weight": 500, "line_height": 1.4, "tracking": "0.01em" },
+        "overline": { "size": "0.75rem", "weight": 700, "line_height": 1.66, "tracking": "2px" }
+      },
+      "font_families": { "heading": "Manrope, 'Gotham', sans-serif", "body": "Inter, sans-serif", "mono": "JetBrains Mono, monospace" },
+      "font_style_notes": "Geometrik grotesk; çok kalın (800) display başlıklar, uppercase + geniş aralıklı overline etiketleri"
+    },
+    "spacing": {
+      "base_unit": "8px",
+      "scale": ["4px", "8px", "16px", "24px", "32px", "48px", "64px", "96px", "128px"],
+      "content_density": "spacious",
+      "section_rhythm": "Bölümler arası 96–128px; koyu bantlar V/chevron kesimle bir sonraki bölüme geçer"
+    },
+    "layout": {
+      "grid_system": "12 kolon",
+      "max_content_width": "1320px",
+      "columns": 12,
+      "gutter": "24px",
+      "breakpoints": { "sm": "640px", "md": "768px", "lg": "1024px", "xl": "1280px" },
+      "alignment_tendency": "mixed"
+    },
+    "shape": {
+      "border_radius": { "small": "4px", "medium": "17px", "large": "38px", "pill": "999px" },
+      "border_usage": "Koyu zeminde 1px ghost-buton kenarlığı; aksi halde yok",
+      "divider_style": "Chevron/V kesimli bölüm geçişi, ince 1px çizgiler"
+    },
+    "elevation": {
+      "shadow_style": "soft diffused",
+      "levels": { "low": "0 1px 3px rgba(0,0,0,.08)", "medium": "0 10px 30px rgba(0,0,0,.10)", "high": "0 24px 60px rgba(0,0,0,.18)" },
+      "depth_cues": "overlapping layers"
+    },
+    "iconography": { "style": "outline", "stroke_weight": "2px", "size_scale": ["16px", "20px", "24px", "40px"], "preferred_set": "Lucide" },
+    "motion": {
+      "easing": "cubic-bezier(.2,.7,.2,1)",
+      "duration_scale": { "micro": "150ms", "normal": "350ms", "macro": "900ms" },
+      "entrance_pattern": "Scroll'da fade-up (24px)",
+      "exit_pattern": "fade",
+      "philosophy": "cinematic"
+    },
+    "components": {
+      "button_style": "Koyu zeminde: ghost (1px beyaz kenar) + dolgulu cyan; açıkta: metin + daire içinde ok ikonu",
+      "input_style": "Altı çizgili ya da açık gri dolgulu, 4px radius, odakta cyan halka",
+      "card_style": "Tam-bleed görsel, 17–38px radius, altta başlık + dairesel ok butonu",
+      "navigation_pattern": "Üstte şeffaf, scroll'da beyaz/blur'a dönen yapışkan header; ikincil üst link satırı",
+      "modal_style": "Tam ekran koyu overlay mobil menü",
+      "list_style": "Rakamlı istatistik blokları, büyük sayı + kısa açıklama",
+      "component_notes": "Hero altında bounce yapan chevron; büyük 'Expertise' tarzı görsel bantlar"
+    }
+  },
+  "design_style": {
+    "aesthetic": {
+      "mood": ["güvenilir", "mühendislik", "sinematik", "kurumsal", "cesur"],
+      "visual_metaphor": "Çelik iskelet ve teknik çizim — geometrik ızgara, kesin çizgiler",
+      "era_influence": "Çağdaş kurumsal (2020'ler)",
+      "genre": "corporate engineering",
+      "personality_traits": ["kendinden emin", "titiz", "şeffaf"],
+      "adjectives": ["sağlam", "temiz", "iddialı", "ferah"]
+    },
+    "visual_language": {
+      "complexity": "moderate",
+      "ornamentation": "subtle accents",
+      "whitespace_usage": "Bol; içerik büyük boşluklarla nefes alır",
+      "visual_weight_distribution": "Üstte ağır (video hero), aşağıda açık-koyu dönüşümlü",
+      "focal_strategy": "single hero element",
+      "contrast_level": "high",
+      "texture_usage": "Koyu bölümlerde ince izometrik altıgen çizgi deseni"
+    },
+    "composition": {
+      "hierarchy_method": "scale contrast",
+      "balance_type": "asymmetric",
+      "flow_direction": "Z-pattern, yukarıdan aşağı",
+      "grouping_strategy": "Kart ızgaraları ve tam genişlik bantlar",
+      "negative_space_role": "Lüks ve güven duygusu"
+    },
+    "imagery": {
+      "photo_treatment": "Doğal, altın saat ışığı; metin için alttan koyu gradient",
+      "illustration_style": "Yok; sadece geometrik çizgi desenleri",
+      "graphic_elements": "Chevron, dairesel ok, altıgen ızgara",
+      "pattern_usage": "Koyu zeminde düşük opaklıklı çizgi deseni",
+      "image_shape": "Büyük yuvarlak köşeli dikdörtgen"
+    },
+    "interaction_feel": {
+      "feedback_style": "Renk ve ok kayması",
+      "hover_behavior": "Görselde hafif zoom (1.05), ok ikonunun sağa kayması",
+      "transition_personality": "smooth glide",
+      "loading_style": "Fade-in",
+      "microinteraction_density": "moderate"
+    },
+    "brand_voice_in_ui": {
+      "tone": "Kendinden emin, çözüm odaklı",
+      "formality": "Resmi",
+      "cta_style": "direct imperative",
+      "empty_state_approach": "Bilgilendirici",
+      "error_tone": "Yardımsever"
+    }
+  },
+  "visual_effects": {
+    "overview": { "effect_intensity": "moderate", "performance_tier": "lightweight", "fallback_strategy": "prefers-reduced-motion'da video duraklar, animasyonlar kapanır", "primary_technology": "CSS + IntersectionObserver" },
+    "background_effects": { "type": "video-bg", "description": "Tam ekran sessiz döngülü hero videosu, üzerinde koyu gradient overlay", "technology": "HTML5 video", "params": { "color_palette": ["#222326", "#143275"], "speed": "1x", "density": "n/a", "opacity": 0.55, "blend_mode": "normal" } },
+    "particle_systems": { "enabled": false, "type": "none", "description": "Yok", "technology": "none", "params": { "count": 0, "shape": "none", "size_range": "none", "movement_pattern": "none", "color_behavior": "none", "interaction": "none", "spawn_area": "none" } },
+    "3d_elements": { "enabled": false, "type": "none", "description": "Yok", "technology": "none", "params": { "renderer": "none", "lighting": "none", "camera": "none", "materials": "none", "geometry": "none", "post_processing": [], "interaction_model": "none" } },
+    "shader_effects": { "enabled": false, "type": "none", "description": "Yok", "technology": "none", "params": { "uniforms": "none", "vertex_manipulation": "none", "fragment_output": "none", "noise_type": "none", "distortion": "none" } },
+    "scroll_effects": {
+      "parallax": { "enabled": true, "layers": "2", "depth_range": "0–15%", "speed_curve": "linear" },
+      "scroll_triggered_animations": { "enabled": true, "trigger_points": "viewport %85", "animation_type": "fade-up", "scrub_behavior": "none" },
+      "scroll_morphing": { "enabled": true, "description": "Header şeffaftan beyaza döner" }
+    },
+    "text_effects": { "type": "split-letter-animate", "description": "Hero başlığı kelime kelime yükselerek gelir (Skanska h1 her kelimeyi ayrı span'a böler)", "technology": "CSS", "params": { "split_strategy": "by-word", "animation_per_unit": "translateY(100%) → 0", "stagger": "80ms", "effect_style": "mask reveal" } },
+    "cursor_effects": { "enabled": false, "type": "none", "description": "Yok", "params": { "shape": "none", "size": "none", "blend_mode": "none", "trail": "none", "interaction_zone": "none" } },
+    "image_effects": { "type": "reveal-clip", "description": "Kart görselleri hover'da zoom", "technology": "CSS", "params": { "filter_pipeline": "none", "hover_transform": "scale(1.05)", "reveal_animation": "fade-up", "distortion_type": "none" } },
+    "glassmorphism_neumorphism": { "enabled": true, "style": "glass", "params": { "blur_radius": "14px", "transparency": 0.85, "border_treatment": "1px rgba(255,255,255,.1)", "shadow_type": "soft", "light_source_angle": "n/a" } },
+    "canvas_drawings": { "enabled": false, "type": "none", "description": "Yok", "technology": "none", "params": { "draw_method": "none", "animation_loop": "none", "color_scheme": "none", "responsiveness": "none", "interaction": "none" } },
+    "svg_animations": { "enabled": true, "type": "decorative-loop", "description": "Hero altında bounce eden çift chevron; koyu bölümlerde altıgen çizgi deseni", "params": { "animation_method": "CSS keyframes", "path_morphing": "none", "stroke_animation": "none", "filter_effects": "none" } },
+    "composite_notes": "Skanska'nın hero'su sessiz/döngülü video kullanıyor; StormTrap koyu zemin + çizgi deseni + chevron kesim kullanıyor. Bu sentezde video hero → V kesimli koyu tanıtım bandı → beyaz kart ızgarası → görselli büyük bant → istatistikler → projeler → CTA akışı uygulanır."
+  }
+}
