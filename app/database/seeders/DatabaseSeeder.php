@@ -173,10 +173,34 @@ class DatabaseSeeder extends Seeder
                 [['Özel bahçe', '2 yatak odası', '2 banyo', 'Bahçe katı + alt kat'], ['Private garden', '2 bedrooms', '2 bathrooms', 'Garden level + lower floor'], ['Собственный сад', '2 спальни', '2 санузла', 'Садовый + нижний уровень']]],
         ];
         foreach ($rows as $i => [$name, $label, $count, $sizes, $desc, $rooms]) {
-            UnitType::create([
+            $unit = UnitType::create([
                 'name' => $name, 'label' => $label[0], 'unit_count' => $count, 'sizes' => $sizes,
                 'description' => $desc[0], 'rooms' => $rooms[0], 'sort_order' => $i,
                 'translations' => $this->tr(['label' => $label, 'description' => $desc, 'rooms' => $rooms]),
+            ]);
+            $this->unitMedia($unit, $i + 1);
+        }
+    }
+
+    /** Repodaki 3D model ve render'ları bağlar: storage/app/public/uploads/units/{klasör}/ */
+    private function unitMedia(UnitType $unit, int $folder): void
+    {
+        $prefix = "uploads/units/$folder/{$unit->slug}";
+        $unit->update(['model_3d' => "$prefix-model.glb"]);
+
+        $renders = [
+            'salon' => ['Salon', 'Living room', 'Гостиная'],
+            'mutfak' => ['Amerikan mutfak', 'Open kitchen', 'Кухня'],
+            'giris' => ['Giriş', 'Entrance', 'Прихожая'],
+            'banyo' => ['Banyo', 'Bathroom', 'Ванная'],
+            'wc' => ['WC', 'Guest WC', 'Санузел'],
+            'yatak-odasi' => ['Yatak odası', 'Bedroom', 'Спальня'],
+            'yatak-odasi-2' => ['Yatak odası', 'Bedroom', 'Спальня'],
+        ];
+        foreach (array_keys($renders) as $order => $file) {
+            $unit->media()->create([
+                'kind' => 'render', 'path' => "$prefix-$file.png", 'caption' => $renders[$file][0], 'sort_order' => $order,
+                'translations' => $this->tr(['caption' => $renders[$file]]),
             ]);
         }
     }

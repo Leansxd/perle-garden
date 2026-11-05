@@ -30,7 +30,7 @@ const year = new Date().getFullYear();
                     </a>
                 </div>
             </div>
-            <p class="pointer-events-none mt-10 font-serif text-[19vw] leading-[0.8] tracking-tight text-pearl/[0.05] select-none lg:text-[15vw]" aria-hidden="true" data-scroll-x="-12">
+            <p class="pointer-events-none mt-10 font-serif text-[11vw] leading-[0.9] tracking-tight whitespace-nowrap text-pearl/[0.05] select-none" aria-hidden="true" data-scroll-x="-12">
                 {{ site.company_name }}
             </p>
             <div class="mt-10 flex flex-col gap-6 border-t border-pearl/10 pt-8 text-[13px] sm:flex-row sm:items-center sm:justify-between">

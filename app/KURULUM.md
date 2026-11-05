@@ -81,7 +81,7 @@ composer serve        # büyük dosya yükleme limitleriyle sunucu (100 MB) → 
 | Site ayarları | Hero metinleri, video ve görseller, tanıtım görselleri, iletişim, WhatsApp, harita |
 | Mesajlar | Formdan gelen talepler; okundu işareti, ara / WhatsApp / e-posta kısayolları |
 
-Yüklenen dosyalar `storage/app/public/uploads/` altına kaydedilir (`public/storage` bağlantısıyla yayınlanır — yeni kurulumda bir kez `php artisan storage:link`).
+Yüklenen dosyalar `storage/app/public/uploads/` altına kaydedilir (`public/storage` bağlantısıyla yayınlanır — yeni kurulumda bir kez `php artisan storage:link`). Daire render'ları ve `.glb` modelleri bu klasörle birlikte repoda tutulur; `php artisan migrate:fresh --seed` bunları daire tiplerine bağlar.
 
 ## Daire sayfaları
 

@@ -208,8 +208,16 @@ const projectFacts = computed(() => [
                     <p v-reveal class="lead">{{ t('units.lead', { count: totalUnits }) }}</p>
                 </div>
 
-                <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-5" data-pop>
-                    <UnitCard v-for="(u, i) in unitTypes" :key="u.id" :unit="u" :index="i" />
+                <!-- İlk iki tip büyük, kalanlar üçlü satırlarda -->
+                <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-6" data-pop>
+                    <UnitCard
+                        v-for="(u, i) in unitTypes"
+                        :key="u.id"
+                        :unit="u"
+                        :index="i"
+                        :featured="i < 2"
+                        :class="[i < 2 ? 'lg:col-span-3' : 'lg:col-span-2', i === unitTypes.length - 1 && unitTypes.length % 2 === 1 && 'sm:col-span-2 lg:col-span-2']"
+                    />
                 </div>
             </div>
         </section>
@@ -239,7 +247,7 @@ const projectFacts = computed(() => [
                     <!-- eslint-disable-next-line vue/no-v-html -->
                     <h2 class="t-h2 mt-6" data-split v-html="accent(t('gallery.title', { name: site.company_name }))"></h2>
                     <p class="lead mt-6 max-w-md text-pearl/60">{{ t('gallery.lead') }}</p>
-                    <p class="mt-10 hidden items-center gap-3 text-[11px] tracking-[0.3em] text-gold-light uppercase lg:flex">
+                    <p class="mt-10 hidden items-center gap-3 text-[12px] tracking-[0.3em] text-gold-light uppercase lg:flex">
                         {{ t('gallery.keep_scrolling') }} <Icon name="arrow-right" :size="14" />
                     </p>
                 </div>
@@ -339,7 +347,7 @@ const projectFacts = computed(() => [
                             <span class="absolute inset-0 grid place-items-center font-serif text-5xl text-gold-light">%{{ progress }}</span>
                         </div>
                         <div>
-                            <p class="text-[11px] tracking-[0.3em] text-pearl/50 uppercase">{{ t('construction.overall') }}</p>
+                            <p class="text-[12px] tracking-[0.25em] text-pearl/60 uppercase">{{ t('construction.overall') }}</p>
                             <p class="t-h3 mt-3">{{ t('construction.delivery') }}</p>
                             <p class="num-italic mt-1 text-2xl text-gold-light">{{ site.delivery_date }}</p>
                         </div>
@@ -386,7 +394,7 @@ const projectFacts = computed(() => [
                         </ul>
                         <dl class="mt-10 grid grid-cols-2 gap-6" data-stagger>
                             <div v-for="f in projectFacts" :key="f.label">
-                                <dt class="text-[11px] tracking-[0.25em] text-muted uppercase">{{ f.label }}</dt>
+                                <dt class="label-xs">{{ f.label }}</dt>
                                 <dd class="t-h3 mt-1">{{ f.value }}</dd>
                             </div>
                         </dl>

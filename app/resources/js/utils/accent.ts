@@ -4,7 +4,12 @@
  */
 export function accent(text: string | null | undefined): string {
     const safe = (text ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
-    return safe.replace(/\*(.+?)\*/g, '<em class="accent">$1</em>').replace(/\n/g, '<br>');
+    // Vurgudan hemen sonra gelen noktalama (", . ; : ! ?") vurguyla aynı satırda kalsın
+    return safe
+        .replace(/\*(.+?)\*([.,;:!?…]*)/g, (_, word: string, punct: string) =>
+            punct ? `<span class="whitespace-nowrap"><em class="accent">${word}</em>${punct}</span>` : `<em class="accent">${word}</em>`,
+        )
+        .replace(/\n/g, '<br>');
 }
 
 export const plain = (text: string | null | undefined) => (text ?? '').replace(/\*/g, '');

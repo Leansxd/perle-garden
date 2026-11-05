@@ -27,6 +27,20 @@ const hasMedia = computed(() => props.unit.renders.length + props.unit.photos.le
 const allMedia = computed<GalleryImage[]>(() =>
     [...props.unit.renders, ...props.unit.photos, ...props.unit.plans].map((m) => ({ id: m.id, path: m.url, caption: m.caption ?? title.value })),
 );
+/* 3D ızgarası: ilk görsel 2×2 büyük; son görsel satırı boşluksuz kapatacak kadar genişler (sm: 2 sütun, lg: 3 sütun) */
+const renderTile = (i: number, n: number): string[] => {
+    const c: string[] = [];
+    if (i === 0 && n > 1) c.push('sm:col-span-2 sm:row-span-2');
+    if (i === n - 1 && i > 0) {
+        if ((n - 1) % 2 === 1) c.push('sm:col-span-2');
+        if (n > 3) {
+            const rest = (n - 3) % 3;
+            c.push(rest === 1 ? 'lg:col-span-3' : rest === 2 ? 'lg:col-span-2' : 'lg:col-span-1');
+        }
+    }
+    return c;
+};
+
 const lightboxIndex = ref<number | null>(null);
 const open = (m: MediaItem) => (lightboxIndex.value = allMedia.value.findIndex((x) => x.id === m.id));
 
@@ -59,7 +73,7 @@ onMounted(async () => {
     if (!prefersReducedMotion() && heroMedia.value) {
         ctx = gsap.context(() => {
             gsap.fromTo(heroMedia.value, { scale: 1.2 }, { scale: 1, duration: 2.4, ease: 'power3.out' });
-            gsap.to(heroMedia.value, { yPercent: 15, ease: 'none', scrollTrigger: { trigger: heroMedia.value, start: 'top top', end: 'bottom top', scrub: true } });
+            gsap.to(heroMedia.value, { yPercent: 10, ease: 'none', scrollTrigger: { trigger: heroMedia.value, start: 'top top', end: 'bottom top', scrub: true } });
             gsap.from('.u-hero-item', { y: 40, autoAlpha: 0, duration: 1.2, ease: 'expo.out', stagger: 0.1, delay: 0.3 });
         });
     }
@@ -77,34 +91,61 @@ onBeforeUnmount(() => {
 
     <div ref="pageEl">
         <!-- HERO -->
-        <header id="top" class="relative isolate flex min-h-[88svh] items-end overflow-hidden bg-deep-sea text-white">
-            <div ref="heroMedia" class="absolute inset-0 -z-20 will-change-transform">
-                <MediaImage :src="hero" :seed="unit.slug" :alt="title" class="size-full" :label="false" :zoom="false" />
-            </div>
-            <div class="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(8,14,13,.8),rgba(8,14,13,.35)_60%,rgba(8,14,13,.15))]"></div>
-            <div class="absolute inset-x-0 bottom-0 -z-10 h-2/3 bg-linear-to-t from-[#08110f]/90 to-transparent"></div>
-
-            <div class="container-site pt-36 pb-16 sm:pb-20">
-                <nav class="u-hero-item mb-8 flex flex-wrap items-center gap-2 text-[12px] tracking-[0.2em] text-white/60 uppercase" aria-label="breadcrumb">
-                    <a :href="localePath('/')" class="hover:text-white">{{ t('unit.home') }}</a>
-                    <span>/</span>
-                    <a :href="`${localePath('/')}#daireler`" class="hover:text-white">{{ t('unit.all') }}</a>
-                    <span>/</span>
+        <header id="top" class="relative isolate grid bg-night text-pearl lg:min-h-svh lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
+            <!-- Sol: bilgi paneli -->
+            <div class="relative z-10 flex flex-col justify-end px-5 pt-32 pb-14 sm:px-10 lg:pt-36 lg:pb-16 lg:pr-14 lg:pl-[max(2.5rem,calc((100vw-80rem)/2+1.25rem))]">
+                <nav class="u-hero-item mb-10 flex flex-wrap items-center gap-2 text-[12px] tracking-[0.2em] text-pearl/55 uppercase" aria-label="breadcrumb">
+                    <a :href="localePath('/')" class="hover:text-pearl">{{ t('unit.home') }}</a>
+                    <span aria-hidden="true">/</span>
+                    <a :href="`${localePath('/')}#daireler`" class="hover:text-pearl">{{ t('unit.all') }}</a>
+                    <span aria-hidden="true">/</span>
                     <span class="text-gold-light">{{ title }}</span>
                 </nav>
-                <h1 class="u-hero-item flex flex-wrap items-baseline gap-x-6">
-                    <span class="font-serif text-[clamp(5rem,16vw,13rem)] leading-[0.85]">{{ unit.name }}</span>
-                    <span v-if="unit.label" class="accent text-[clamp(2.4rem,6vw,5rem)]">{{ unit.label }}</span>
+
+                <p class="u-hero-item kicker kicker-light">{{ site.company_name }}</p>
+                <h1 class="u-hero-item mt-6 flex flex-wrap items-baseline gap-x-5">
+                    <span class="font-serif text-[clamp(4.5rem,11vw,9.5rem)] leading-[0.85]">{{ unit.name }}</span>
+                    <span v-if="unit.label" class="accent text-[clamp(2rem,4.5vw,3.75rem)]">{{ unit.label }}</span>
                 </h1>
-                <div class="u-hero-item mt-10 grid max-w-3xl grid-cols-1 gap-px overflow-hidden rounded-(--radius-md) border border-white/15 bg-white/15 backdrop-blur-md sm:grid-cols-3">
-                    <div v-for="f in facts" :key="f.label" class="bg-night/40 px-6 py-5">
-                        <p class="text-[11px] tracking-[0.25em] text-white/55 uppercase">{{ f.label }}</p>
-                        <p class="mt-1 font-serif text-xl text-gold-light">{{ f.value }}</p>
+                <p v-if="unit.description" class="u-hero-item lead mt-8 max-w-md text-pearl/70">{{ unit.description }}</p>
+
+                <dl class="u-hero-item mt-10 max-w-lg border-t border-pearl/15">
+                    <div v-for="f in facts" :key="f.label" class="flex items-baseline justify-between gap-6 border-b border-pearl/15 py-4">
+                        <dt class="shrink-0 text-[12px] tracking-[0.2em] text-pearl/60 uppercase">{{ f.label }}</dt>
+                        <dd class="text-right font-serif text-lg text-gold-light">{{ f.value }}</dd>
                     </div>
-                </div>
-                <div class="u-hero-item mt-8 flex flex-wrap gap-3">
+                </dl>
+
+                <div class="u-hero-item mt-10 flex flex-wrap gap-3">
                     <button type="button" class="btn" data-magnetic @click="scrollToId('iletisim')">{{ t('unit.enquire') }} <Icon name="arrow-right" :size="16" /></button>
                     <a :href="`${localePath('/')}#daireler`" class="btn btn-outline-light" data-magnetic>{{ t('unit.all') }}</a>
+                </div>
+            </div>
+
+            <!-- Sağ: net kapak görseli + önizleme şeridi -->
+            <div class="relative min-h-[62svh] overflow-hidden lg:min-h-0">
+                <div ref="heroMedia" class="absolute inset-x-0 -top-[15%] h-[115%] will-change-transform">
+                    <MediaImage :src="hero" :seed="unit.slug" :alt="title" class="size-full" :label="false" :zoom="false" />
+                </div>
+                <div class="pointer-events-none absolute inset-y-0 left-0 hidden w-40 bg-linear-to-r from-night to-transparent lg:block"></div>
+                <div class="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-linear-to-t from-night/80 to-transparent"></div>
+
+                <div v-if="unit.renders.length > 1" class="u-hero-item absolute right-5 bottom-5 left-5 flex justify-end gap-2 sm:right-8 sm:bottom-8 sm:gap-3">
+                    <button
+                        v-for="(m, i) in unit.renders.slice(1, 5)"
+                        :key="m.id"
+                        type="button"
+                        class="group relative aspect-[4/3] w-1/4 max-w-32 overflow-hidden rounded-(--radius-sm) ring-1 ring-white/30 transition hover:ring-gold-light"
+                        :aria-label="m.caption ?? title"
+                        :data-cursor="t('cursor.view')"
+                        @click="open(m)"
+                    >
+                        <MediaImage :src="m.url" :seed="`h-${m.id}`" :alt="m.caption ?? title" class="size-full transition duration-500 group-hover:scale-110" :label="false" :zoom="false" />
+                        <span
+                            v-if="i === 3 && unit.renders.length > 5"
+                            class="absolute inset-0 grid place-items-center bg-black/55 font-serif text-xl text-white"
+                        >+{{ unit.renders.length - 5 }}</span>
+                    </button>
                 </div>
             </div>
         </header>
@@ -141,7 +182,7 @@ onBeforeUnmount(() => {
                         :key="m.id"
                         type="button"
                         class="group relative overflow-hidden rounded-(--radius-md)"
-                        :class="[i % 5 === 0 && 'sm:col-span-2 sm:row-span-2']"
+                        :class="renderTile(i, unit.renders.length)"
                         :data-cursor="t('cursor.view')"
                         :aria-label="m.caption ?? title"
                         @click="open(m)"

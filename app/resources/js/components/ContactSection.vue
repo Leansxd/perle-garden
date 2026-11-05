@@ -56,29 +56,29 @@ defineExpose({ selectUnit });
                 <p class="mt-2 text-[15px] text-muted">{{ t('contact.form_lead') }}</p>
                 <div class="mt-8 grid gap-x-6 gap-y-7 sm:grid-cols-2">
                     <label class="block">
-                        <span class="block text-[11px] tracking-[0.22em] text-muted uppercase">{{ t('form.name') }} *</span>
+                        <span class="label-xs block">{{ t('form.name') }} *</span>
                         <input id="f-name" v-model="form.name" type="text" class="field" autocomplete="name" required />
                         <span v-if="form.errors.name" class="mt-1 block text-[13px] text-red-600">{{ form.errors.name }}</span>
                     </label>
                     <label class="block">
-                        <span class="block text-[11px] tracking-[0.22em] text-muted uppercase">{{ t('form.phone') }} *</span>
+                        <span class="label-xs block">{{ t('form.phone') }} *</span>
                         <input v-model="form.phone" type="tel" class="field" autocomplete="tel" required />
                         <span v-if="form.errors.phone" class="mt-1 block text-[13px] text-red-600">{{ form.errors.phone }}</span>
                     </label>
                     <label class="block">
-                        <span class="block text-[11px] tracking-[0.22em] text-muted uppercase">{{ t('form.email') }}</span>
+                        <span class="label-xs block">{{ t('form.email') }}</span>
                         <input v-model="form.email" type="email" class="field" autocomplete="email" />
                         <span v-if="form.errors.email" class="mt-1 block text-[13px] text-red-600">{{ form.errors.email }}</span>
                     </label>
                     <label class="block">
-                        <span class="block text-[11px] tracking-[0.22em] text-muted uppercase">{{ t('form.unit') }}</span>
+                        <span class="label-xs block">{{ t('form.unit') }}</span>
                         <select v-model="form.unit_type" class="field">
                             <option value="">{{ t('contact.any') }}</option>
                             <option v-for="u in units" :key="u.title" :value="u.title">{{ u.title }}<template v-if="u.sizes"> · {{ u.sizes }}</template></option>
                         </select>
                     </label>
                     <label class="block sm:col-span-2">
-                        <span class="block text-[11px] tracking-[0.22em] text-muted uppercase">{{ t('form.message') }}</span>
+                        <span class="label-xs block">{{ t('form.message') }}</span>
                         <textarea v-model="form.message" rows="3" class="field resize-y"></textarea>
                     </label>
                 </div>

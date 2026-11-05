@@ -113,7 +113,7 @@ function localeHref(url: string) {
                             :lang="l.code"
                             :title="l.name"
                             class="px-1 py-1 transition-colors"
-                            :class="locale === l.code ? 'text-gold' : 'opacity-70 hover:opacity-100'"
+                            :class="locale === l.code ? ['border-b border-current', solid || menuOpen ? 'text-gold-dark' : 'text-gold-light'] : 'opacity-70 hover:opacity-100'"
                             :aria-current="locale === l.code ? 'true' : undefined"
                         >
                             {{ l.label }}

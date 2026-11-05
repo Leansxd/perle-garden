@@ -20,7 +20,7 @@
     --color-gold-deep: #8e6230;
     --color-pearl: #f4efe6;
     --color-ink: #1a1d1b;
-    --color-muted: #6b6e6a;
+    --color-muted: #5e615d;
     --color-cream: #f6f1e8;
     --color-sand: #ece3d3;
     --color-line: #e4dccd;
@@ -51,7 +51,7 @@
         overflow: clip;
     }
     body {
-        @apply overflow-x-clip bg-pearl font-sans font-light text-ink antialiased;
+        @apply overflow-x-clip bg-pearl font-sans font-normal text-ink antialiased;
     }
     h1, h2, h3 {
         text-wrap: balance;
@@ -73,12 +73,17 @@
 
 @layer components {
     .container-site {
-        @apply mx-auto w-[min(1240px,92%)];
+        @apply mx-auto w-[min(1280px,92%)];
+    }
+
+    /* Küçük büyük harf etiketler (dt, kart üst bilgileri) — okunur boyut ve kontrast */
+    .label-xs {
+        @apply text-[12px] font-medium tracking-[0.2em] text-muted uppercase;
     }
 
     /* Üst etiket: ince altın çizgi + aralıklı büyük harf */
     .kicker {
-        @apply inline-flex items-center gap-3 text-[11px] font-medium tracking-[0.32em] text-gold-dark uppercase;
+        @apply inline-flex items-center gap-3 text-[12px] font-medium tracking-[0.3em] text-gold-dark uppercase;
     }
     .kicker::before {
         content: '';
@@ -114,7 +119,7 @@
         @apply font-italic italic;
     }
     .lead {
-        @apply text-[17px] leading-[1.8] font-light text-muted sm:text-lg;
+        @apply text-[17px] leading-[1.75] font-normal text-muted sm:text-[19px];
     }
 
     /* Butonlar: hap form + kayan dolgu efekti */
