@@ -5,6 +5,7 @@ import HeroVideo from '@/components/HeroVideo.vue';
 import MediaImage from '@/components/MediaImage.vue';
 import StatCounter from '@/components/StatCounter.vue';
 import Lightbox from '@/components/Lightbox.vue';
+import ShowcaseExperience from '@/components/ShowcaseExperience.vue';
 import UnitCard from '@/components/UnitCard.vue';
 import ContactSection from '@/components/ContactSection.vue';
 import Icon from '@/components/Icon.vue';
@@ -14,12 +15,14 @@ import { useSite } from '@/composables/useSite';
 import { useI18n } from '@/composables/useI18n';
 import { bindScrollAnimations, gsap, prefersReducedMotion, scrollToId } from '@/motion/motion';
 import { accent } from '@/utils/accent';
-import type { ConstructionPhase, GalleryImage, Highlight, LocationPoint, StatItem, UnitType } from '@/types';
+import type { ConstructionPhase, GalleryImage, Highlight, LocationPoint, StatItem, UnitType, UnitDetail } from '@/types';
 
 const props = defineProps<{
     stats: StatItem[];
     highlights: Highlight[];
     unitTypes: UnitType[];
+    totalUnits: number;
+    showcaseUnits: UnitDetail[];
     gallery: GalleryImage[];
     amenities: string[];
     phases: ConstructionPhase[];
@@ -32,14 +35,13 @@ const { t, locales } = useI18n();
 const contactUnits = computed(() => props.unitTypes.map((u) => ({ title: unitTitle(u), sizes: u.sizes })));
 
 const unitTitle = (u: UnitType) => (u.label ? `${u.name} ${u.label}` : u.name);
-const totalUnits = computed(() => props.unitTypes.reduce((n, u) => n + u.unit_count, 0));
 const seaDistance = computed(() => (props.stats[0] ? `${props.stats[0].value}${props.stats[0].suffix ?? ''}` : '100 m'));
 
 const marqueeItems = computed(() =>
     [
         site.value.location_name,
         t('marquee.sea', { distance: seaDistance.value }),
-        t('marquee.units', { count: totalUnits.value }),
+        t('marquee.units', { count: props.totalUnits }),
         t('marquee.comfort'),
         site.value.delivery_date ? t('marquee.delivery', { date: site.value.delivery_date }) : null,
     ].filter(Boolean) as string[],
@@ -194,6 +196,9 @@ const projectFacts = computed(() => [
                 </div>
             </div>
         </section>
+
+        <!-- VİTRİN: bina → 3D kat planı → oda turu -->
+        <ShowcaseExperience :units="showcaseUnits" />
 
         <!-- DAİRELER -->
         <section id="daireler" class="relative overflow-hidden bg-cream py-24 sm:py-36">

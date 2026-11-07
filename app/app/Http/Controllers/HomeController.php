@@ -19,10 +19,14 @@ class HomeController extends Controller
     {
         $phases = ConstructionPhase::ordered()->get()->map->localized(['title', 'note'], ['percent']);
 
+        $units = UnitType::published()->with('media')->ordered()->get();
+
         return Inertia::render('Home', [
             'stats' => Stat::orderBy('sort_order')->get()->map->localized(['label'], ['prefix', 'value', 'suffix']),
             'highlights' => Highlight::ordered()->get()->map->localized(['title', 'description']),
-            'unitTypes' => UnitType::published()->with('media')->ordered()->get()->map->toCard(),
+            'unitTypes' => $units->map->toCard(),
+            'showcaseUnits' => $units->map->toDetail(),
+            'totalUnits' => (int) UnitType::sum('unit_count'), // proje toplamı: yayında olmayan tipler de dahil
             'gallery' => GalleryImage::ordered()->get()->map(fn (GalleryImage $g) => [
                 'id' => $g->id,
                 'path' => media_url($g->path),

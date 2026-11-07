@@ -6,6 +6,7 @@ import Lightbox from '@/components/Lightbox.vue';
 import UnitCard from '@/components/UnitCard.vue';
 import ContactSection from '@/components/ContactSection.vue';
 import Model3D from '@/components/Model3D.vue';
+import RenderCarousel from '@/components/RenderCarousel.vue';
 import Icon from '@/components/Icon.vue';
 import { useSite } from '@/composables/useSite';
 import { useI18n } from '@/composables/useI18n';
@@ -27,20 +28,6 @@ const hasMedia = computed(() => props.unit.renders.length + props.unit.photos.le
 const allMedia = computed<GalleryImage[]>(() =>
     [...props.unit.renders, ...props.unit.photos, ...props.unit.plans].map((m) => ({ id: m.id, path: m.url, caption: m.caption ?? title.value })),
 );
-/* 3D ızgarası: ilk görsel 2×2 büyük; son görsel satırı boşluksuz kapatacak kadar genişler (sm: 2 sütun, lg: 3 sütun) */
-const renderTile = (i: number, n: number): string[] => {
-    const c: string[] = [];
-    if (i === 0 && n > 1) c.push('sm:col-span-2 sm:row-span-2');
-    if (i === n - 1 && i > 0) {
-        if ((n - 1) % 2 === 1) c.push('sm:col-span-2');
-        if (n > 3) {
-            const rest = (n - 3) % 3;
-            c.push(rest === 1 ? 'lg:col-span-3' : rest === 2 ? 'lg:col-span-2' : 'lg:col-span-1');
-        }
-    }
-    return c;
-};
-
 const lightboxIndex = ref<number | null>(null);
 const open = (m: MediaItem) => (lightboxIndex.value = allMedia.value.findIndex((x) => x.id === m.id));
 
@@ -91,10 +78,14 @@ onBeforeUnmount(() => {
 
     <div ref="pageEl">
         <!-- HERO -->
-        <header id="top" class="relative isolate grid bg-night text-pearl lg:min-h-svh lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
-            <!-- Sol: bilgi paneli -->
-            <div class="relative z-10 flex flex-col justify-end px-5 pt-32 pb-14 sm:px-10 lg:pt-36 lg:pb-16 lg:pr-14 lg:pl-[max(2.5rem,calc((100vw-80rem)/2+1.25rem))]">
-                <nav class="u-hero-item mb-10 flex flex-wrap items-center gap-2 text-[12px] tracking-[0.2em] text-pearl/55 uppercase" aria-label="breadcrumb">
+        <header id="top" class="relative isolate flex min-h-svh flex-col justify-end overflow-hidden bg-night text-pearl">
+            <div ref="heroMedia" class="absolute inset-x-0 -top-[15%] -z-10 h-[130%] will-change-transform">
+                <MediaImage :src="hero" :seed="unit.slug" :alt="title" class="size-full" :label="false" :zoom="false" />
+            </div>
+            <div class="pointer-events-none absolute inset-0 -z-10 bg-linear-to-t from-night via-night/60 to-night/55 sm:via-night/25"></div>
+
+            <div class="container-site pt-32 pb-8 sm:pb-10">
+                <nav class="u-hero-item mb-8 flex flex-wrap items-center gap-2 text-[12px] tracking-[0.2em] text-pearl/75 uppercase" aria-label="breadcrumb">
                     <a :href="localePath('/')" class="hover:text-pearl">{{ t('unit.home') }}</a>
                     <span aria-hidden="true">/</span>
                     <a :href="`${localePath('/')}#daireler`" class="hover:text-pearl">{{ t('unit.all') }}</a>
@@ -102,51 +93,26 @@ onBeforeUnmount(() => {
                     <span class="text-gold-light">{{ title }}</span>
                 </nav>
 
-                <p class="u-hero-item kicker kicker-light">{{ site.company_name }}</p>
-                <h1 class="u-hero-item mt-6 flex flex-wrap items-baseline gap-x-5">
-                    <span class="font-serif text-[clamp(4.5rem,11vw,9.5rem)] leading-[0.85]">{{ unit.name }}</span>
-                    <span v-if="unit.label" class="accent text-[clamp(2rem,4.5vw,3.75rem)]">{{ unit.label }}</span>
-                </h1>
-                <p v-if="unit.description" class="u-hero-item lead mt-8 max-w-md text-pearl/70">{{ unit.description }}</p>
+                <div class="flex flex-col justify-between gap-8 lg:flex-row lg:items-end">
+                    <div>
+                        <p class="u-hero-item kicker kicker-light">{{ site.company_name }}</p>
+                        <h1 class="u-hero-item mt-5 flex flex-wrap items-baseline gap-x-5">
+                            <span class="font-serif text-[clamp(4.5rem,12vw,11rem)] leading-[0.85]">{{ unit.name }}</span>
+                            <span v-if="unit.label" class="accent text-[clamp(2rem,4.5vw,3.75rem)]">{{ unit.label }}</span>
+                        </h1>
+                    </div>
+                    <div class="u-hero-item flex flex-wrap gap-3">
+                        <button type="button" class="btn" data-magnetic @click="scrollToId('iletisim')">{{ t('unit.enquire') }} <Icon name="arrow-right" :size="16" /></button>
+                        <a :href="`${localePath('/')}#daireler`" class="btn btn-outline-light" data-magnetic>{{ t('unit.all') }}</a>
+                    </div>
+                </div>
 
-                <dl class="u-hero-item mt-10 max-w-lg border-t border-pearl/15">
-                    <div v-for="f in facts" :key="f.label" class="flex items-baseline justify-between gap-6 border-b border-pearl/15 py-4">
-                        <dt class="shrink-0 text-[12px] tracking-[0.2em] text-pearl/60 uppercase">{{ f.label }}</dt>
-                        <dd class="text-right font-serif text-lg text-gold-light">{{ f.value }}</dd>
+                <dl class="u-hero-item mt-10 grid border-t border-pearl/25 sm:grid-cols-3">
+                    <div v-for="f in facts" :key="f.label" class="flex items-baseline justify-between gap-6 border-b border-pearl/15 py-4 sm:block sm:border-b-0 sm:py-5">
+                        <dt class="text-[12px] tracking-[0.2em] text-pearl/70 uppercase">{{ f.label }}</dt>
+                        <dd class="text-right font-serif text-lg text-gold-light sm:mt-2 sm:text-left sm:text-xl">{{ f.value }}</dd>
                     </div>
                 </dl>
-
-                <div class="u-hero-item mt-10 flex flex-wrap gap-3">
-                    <button type="button" class="btn" data-magnetic @click="scrollToId('iletisim')">{{ t('unit.enquire') }} <Icon name="arrow-right" :size="16" /></button>
-                    <a :href="`${localePath('/')}#daireler`" class="btn btn-outline-light" data-magnetic>{{ t('unit.all') }}</a>
-                </div>
-            </div>
-
-            <!-- Sağ: net kapak görseli + önizleme şeridi -->
-            <div class="relative min-h-[62svh] overflow-hidden lg:min-h-0">
-                <div ref="heroMedia" class="absolute inset-x-0 -top-[15%] h-[115%] will-change-transform">
-                    <MediaImage :src="hero" :seed="unit.slug" :alt="title" class="size-full" :label="false" :zoom="false" />
-                </div>
-                <div class="pointer-events-none absolute inset-y-0 left-0 hidden w-40 bg-linear-to-r from-night to-transparent lg:block"></div>
-                <div class="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-linear-to-t from-night/80 to-transparent"></div>
-
-                <div v-if="unit.renders.length > 1" class="u-hero-item absolute right-5 bottom-5 left-5 flex justify-end gap-2 sm:right-8 sm:bottom-8 sm:gap-3">
-                    <button
-                        v-for="(m, i) in unit.renders.slice(1, 5)"
-                        :key="m.id"
-                        type="button"
-                        class="group relative aspect-[4/3] w-1/4 max-w-32 overflow-hidden rounded-(--radius-sm) ring-1 ring-white/30 transition hover:ring-gold-light"
-                        :aria-label="m.caption ?? title"
-                        :data-cursor="t('cursor.view')"
-                        @click="open(m)"
-                    >
-                        <MediaImage :src="m.url" :seed="`h-${m.id}`" :alt="m.caption ?? title" class="size-full transition duration-500 group-hover:scale-110" :label="false" :zoom="false" />
-                        <span
-                            v-if="i === 3 && unit.renders.length > 5"
-                            class="absolute inset-0 grid place-items-center bg-black/55 font-serif text-xl text-white"
-                        >+{{ unit.renders.length - 5 }}</span>
-                    </button>
-                </div>
             </div>
         </header>
 
@@ -165,33 +131,17 @@ onBeforeUnmount(() => {
             </ul>
         </section>
 
-        <!-- 3D GÖRSELLER -->
-        <section v-if="unit.renders.length" class="bg-night py-24 text-pearl sm:py-32">
-            <div class="container-site">
-                <div class="mb-14 flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
-                    <div>
-                        <p class="kicker kicker-light">3D</p>
-                        <!-- eslint-disable-next-line vue/no-v-html -->
-                        <h2 class="t-h2 mt-6" data-split v-html="accent(t('unit.renders'))"></h2>
-                    </div>
-                    <p v-reveal class="lead max-w-md text-pearl/60">{{ t('unit.renders_lead') }}</p>
+        <!-- İÇ MEKÂN GÖRSELLERİ -->
+        <section v-if="unit.renders.length" class="overflow-hidden bg-night py-24 text-pearl sm:py-32">
+            <div class="container-site mb-12 flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
+                <div>
+                    <p class="kicker kicker-light">{{ title }}</p>
+                    <!-- eslint-disable-next-line vue/no-v-html -->
+                    <h2 class="t-h2 mt-6" data-split v-html="accent(t('unit.renders'))"></h2>
                 </div>
-                <div class="grid auto-rows-[260px] gap-4 sm:grid-cols-2 lg:auto-rows-[300px] lg:grid-cols-3" data-pop>
-                    <button
-                        v-for="(m, i) in unit.renders"
-                        :key="m.id"
-                        type="button"
-                        class="group relative overflow-hidden rounded-(--radius-md)"
-                        :class="renderTile(i, unit.renders.length)"
-                        :data-cursor="t('cursor.view')"
-                        :aria-label="m.caption ?? title"
-                        @click="open(m)"
-                    >
-                        <MediaImage :src="m.url" :seed="`r-${m.id}`" :alt="m.caption ?? title" class="size-full" :label="false" />
-                        <span v-if="m.caption" class="absolute bottom-4 left-4 rounded-full bg-black/40 px-3 py-1 text-xs text-white/90 backdrop-blur-sm">{{ m.caption }}</span>
-                    </button>
-                </div>
+                <p v-reveal class="lead max-w-md text-pearl/70">{{ t('unit.renders_lead') }}</p>
             </div>
+            <RenderCarousel :images="unit.renders" :title="title" @open="open" />
         </section>
 
         <!-- FOTOĞRAFLAR -->
@@ -244,15 +194,13 @@ onBeforeUnmount(() => {
         </section>
 
         <!-- 3D MODEL -->
-        <section v-if="unit.model_3d" class="py-24 sm:py-32">
-            <div class="container-site">
-                <div class="mb-12 flex flex-col justify-between gap-4 lg:flex-row lg:items-end">
-                    <!-- eslint-disable-next-line vue/no-v-html -->
-                    <h2 class="t-h2" data-split v-html="accent(t('unit.model'))"></h2>
-                    <p class="flex items-center gap-2 text-sm text-muted"><Icon name="sparkle" :size="16" class="text-gold" /> {{ t('unit.model_hint') }}</p>
-                </div>
-                <Model3D :src="unit.model_3d" :poster="hero" :alt="title" :ar-label="t('unit.ar')" />
+        <section v-if="unit.model_3d" class="bg-night text-pearl">
+            <div class="container-site pt-24 pb-6 sm:pt-32">
+                <!-- eslint-disable-next-line vue/no-v-html -->
+                <h2 class="t-h2" data-split v-html="accent(t('unit.model'))"></h2>
+                <p class="mt-4 flex items-center gap-2 text-sm text-pearl/75"><Icon name="sparkle" :size="16" class="shrink-0 text-gold" /> {{ t('unit.model_hint') }}</p>
             </div>
+            <Model3D :src="unit.model_3d" :alt="title" :ar-label="t('unit.ar')" />
         </section>
 
         <!-- 360° TUR -->

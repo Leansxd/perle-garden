@@ -1,0 +1,127 @@
+{
+    "building": {
+        "image": "/media/galeri/09.jpg",
+        "width": 1600,
+        "height": 1073,
+        "facades": [
+            {
+                "id": "a-sol",
+                "unit": "1-1",
+                "floors": 4,
+                "corners": [[77, 432], [230, 465], [230, 590], [90, 557]]
+            },
+            {
+                "id": "a-sag",
+                "unit": "1-1",
+                "floors": 4,
+                "corners": [[230, 465], [290, 452], [290, 582], [230, 590]]
+            },
+            {
+                "id": "b-sol",
+                "unit": "1-1",
+                "floors": 4,
+                "corners": [[300, 490], [442, 522], [440, 650], [302, 617]]
+            },
+            {
+                "id": "b-sag",
+                "unit": "1-1",
+                "floors": 4,
+                "corners": [[442, 522], [615, 490], [625, 615], [440, 650]]
+            },
+            {
+                "id": "orta",
+                "unit": "1-1",
+                "floors": 5,
+                "corners": [[660, 392], [800, 368], [800, 527], [660, 552]]
+            },
+            {
+                "id": "c-sol",
+                "unit": "2-1",
+                "floors": 4,
+                "corners": [[867, 517], [1000, 562], [997, 684], [890, 667]]
+            },
+            {
+                "id": "c-sag",
+                "unit": "2-1",
+                "floors": 4,
+                "corners": [[1000, 562], [1200, 527], [1200, 662], [997, 684]]
+            },
+            {
+                "id": "d-sol",
+                "unit": "2-1",
+                "floors": 4,
+                "corners": [[1175, 461], [1300, 502], [1305, 632], [1200, 600]]
+            },
+            {
+                "id": "d-sag",
+                "unit": "2-1",
+                "floors": 4,
+                "corners": [[1300, 502], [1515, 472], [1500, 602], [1305, 632]]
+            }
+        ]
+    },
+    "units": [
+        {
+            "slug": "1-1",
+            "price": null,
+            "bathrooms": 1,
+            "roomPoints": [
+                {
+                    "render": "salon",
+                    "position": [-0.173, -0.035, -0.143]
+                },
+                {
+                    "render": "mutfak",
+                    "position": [0.166, -0.062, -0.233]
+                },
+                {
+                    "render": "yatak-odasi",
+                    "position": [0.019, -0.029, 0.153]
+                },
+                {
+                    "render": "giris",
+                    "position": [0.19, -0.065, -0.006]
+                },
+                {
+                    "render": "banyo",
+                    "position": [0.398, -0.059, 0.107]
+                },
+                {
+                    "render": "wc",
+                    "position": [0.299, -0.065, 0.288]
+                }
+            ]
+        },
+        {
+            "slug": "2-1",
+            "price": null,
+            "bathrooms": 2,
+            "roomPoints": [
+                {
+                    "render": "salon",
+                    "position": [-0.129, -0.035, -0.188]
+                },
+                {
+                    "render": "salon-2",
+                    "position": [0.108, -0.015, -0.225]
+                },
+                {
+                    "render": "ebeveyn-yatak-odasi",
+                    "position": [0.332, -0.025, -0.128]
+                },
+                {
+                    "render": "genc-odasi",
+                    "position": [-0.206, -0.068, 0.14]
+                },
+                {
+                    "render": "ebeveyn-banyo",
+                    "position": [0.383, -0.072, 0.19]
+                },
+                {
+                    "render": "genel-banyo",
+                    "position": [0.209, -0.072, 0.311]
+                }
+            ]
+        }
+    ]
+}

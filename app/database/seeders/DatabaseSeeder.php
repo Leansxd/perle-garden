@@ -176,11 +176,34 @@ class DatabaseSeeder extends Seeder
             $unit = UnitType::create([
                 'name' => $name, 'label' => $label[0], 'unit_count' => $count, 'sizes' => $sizes,
                 'description' => $desc[0], 'rooms' => $rooms[0], 'sort_order' => $i,
+                'is_published' => $i < 2, // dubleks tipleri şimdilik yayında değil; admin panelinden açılabilir
                 'translations' => $this->tr(['label' => $label, 'description' => $desc, 'rooms' => $rooms]),
             ]);
             $this->unitMedia($unit, $i + 1);
         }
     }
+
+    /** Daireye özel render'lar; listede olmayan daireler ortak diziyi kullanır. */
+    private const UNIT_RENDERS = [
+        '1-1' => [
+            'salon' => ['Salon', 'Living room', 'Гостиная'],
+            'mutfak' => ['Amerikan mutfak', 'Open kitchen', 'Кухня'],
+            'yatak-odasi' => ['Yatak odası', 'Bedroom', 'Спальня'],
+            'yatak-odasi-2' => ['Yatak odası', 'Bedroom', 'Спальня'],
+            'giris' => ['Giriş', 'Entrance', 'Прихожая'],
+            'banyo' => ['Banyo', 'Bathroom', 'Ванная'],
+            'wc' => ['Duş ve WC', 'Shower and WC', 'Душ и санузел'],
+        ],
+        '2-1' => [
+            'salon' => ['Salon', 'Living room', 'Гостиная'],
+            'salon-2' => ['Salon ve Amerikan mutfak', 'Living room and open kitchen', 'Гостиная и кухня-студия'],
+            'ebeveyn-yatak-odasi' => ['Ebeveyn yatak odası', 'Master bedroom', 'Главная спальня'],
+            'ebeveyn-yatak-odasi-2' => ['Ebeveyn yatak odası', 'Master bedroom', 'Главная спальня'],
+            'ebeveyn-banyo' => ['Ebeveyn banyosu', 'En-suite bathroom', 'Мастер-санузел'],
+            'genel-banyo' => ['Genel banyo', 'Main bathroom', 'Общая ванная'],
+            'genc-odasi' => ['Genç odası', 'Youth room', 'Молодёжная комната'],
+        ],
+    ];
 
     /** Repodaki 3D model ve render'ları bağlar: storage/app/public/uploads/units/{klasör}/ */
     private function unitMedia(UnitType $unit, int $folder): void
@@ -188,7 +211,7 @@ class DatabaseSeeder extends Seeder
         $prefix = "uploads/units/$folder/{$unit->slug}";
         $unit->update(['model_3d' => "$prefix-model.glb"]);
 
-        $renders = [
+        $renders = self::UNIT_RENDERS[$unit->slug] ?? [
             'salon' => ['Salon', 'Living room', 'Гостиная'],
             'mutfak' => ['Amerikan mutfak', 'Open kitchen', 'Кухня'],
             'giris' => ['Giriş', 'Entrance', 'Прихожая'],

@@ -2,16 +2,11 @@
 
 Tek sayfalık, animasyonlu konut projesi tanıtım sitesi.
 
-**Teknolojiler:** Laravel 13 (PHP 8.5) · Inertia.js v3 · Vue 3 + TypeScript · Tailwind CSS v4 · GSAP (ScrollTrigger, SplitText) · Lenis · MySQL/MariaDB
+**Teknolojiler:** Laravel 13 (PHP 8.5) · Inertia.js v3 · Vue 3 + TypeScript · Tailwind CSS v4 · GSAP (ScrollTrigger, SplitText) · Lenis · SQLite (yerel) / MySQL (sunucu)
 
 ## Çalıştırma
 
-```bash
-cd app
-php artisan migrate:fresh --seed   # tabloları kurar + örnek içerik (XAMPP MySQL, port 3307)
-npm run build                      # ya da geliştirirken: npm run dev
-php artisan serve                  # http://localhost:8000
-```
+Kurulum ve çalıştırma adımları için depo kökündeki [README](../README.md) dosyasına bakın.
 
 ## Bölümler (tek sayfa)
 
